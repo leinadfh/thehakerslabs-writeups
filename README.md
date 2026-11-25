@@ -2,7 +2,7 @@
 
 Colección de informes de resolución de máquinas CTF realizadas en **laboratorio propio y autorizado**, con fines de aprendizaje de pentesting. El foco está en la **metodología y el razonamiento** de cada fase, no en las soluciones rápidas.
 
-🌐 **Sitio web (informes con diseño):** `https://<tu-usuario>.github.io/thl-writeups/`
+🌐 **Sitio web (informes con diseño):** `https://leinadfh.github.io/thehakerslabs-writeups/`
 
 > ⚠️ **Sin spoilers:** estos write-ups **no incluyen las flags** y evitan revelar valores sensibles, para no estropear el reto a otras personas. Se documenta *cómo se piensa*, no *qué hay que copiar*.
 
@@ -23,7 +23,7 @@ Colección de informes de resolución de máquinas CTF realizadas en **laborator
 1. Sube el repo a GitHub.
 2. **Settings → Pages → Build and deployment → Source: _Deploy from a branch_**.
 3. Branch: `main`, carpeta: **`/docs`**. Guarda.
-4. En ~1 min estará en `https://<tu-usuario>.github.io/thl-writeups/`.
+4. En ~1 min estará en `https://leinadfh.github.io/thehakerslabs-writeups/`.
 
 ---
 
