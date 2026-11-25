@@ -189,3 +189,14 @@ Esperamos <1 min a que el cron dispare, y después:
 ## 8. Conclusión
 
 Academy es un recordatorio excelente de que la seguridad real se rompe por **acumulación de descuidos**, no por un único 0-day. El camino premia la enumeración metódica y castiga las suposiciones.
+
+---
+
+## Certificado
+
+Máquina completada y verificada por The Hacker Labs.
+
+[![Certificado de la máquina Academy — The Hackers Labs](../docs/academy/certificado.png)](https://labs.thehackerslabs.com/machines/share/UqEc3Ct0fun9wmf4beDIJP8Uz8OUyyJVUdJSXhPpcWs)
+
+- **ID:** `THL-KVQN-36548567359`
+- 🔗 [Ver certificado en The Hackers Labs](https://labs.thehackerslabs.com/machines/share/UqEc3Ct0fun9wmf4beDIJP8Uz8OUyyJVUdJSXhPpcWs)

@@ -115,6 +115,7 @@
 <body>
 <section class="hero">
   <div class="wrap">
+    <a class="backlink" href="../">← Volver al portfolio</a>
     <div class="eyebrow">Informe de Test de Intrusión · Laboratorio autorizado</div>
     <h1>Academy</h1>
     <p class="sub">Caja CTF de The Hacker Labs evaluada en homelab VMware propio. Del descubrimiento de red a la ejecución de código como <code>root</code>, documentando cada decisión.</p>
@@ -300,6 +301,32 @@ cat /root/root.txt &gt; /dev/shm/root.txt
       </div>
     </div>
     <p style="margin-top:1rem;color:var(--fg-muted);font-size:.85rem">Hashes de <code>/etc/shadow</code> (root, debian) y ficheros de scan archivados en el dossier local junto a este informe.</p>
+  </div>
+</section>
+
+<style>
+  .backlink{display:inline-block;color:#9aa7b4;text-decoration:none;font-family:var(--mono);font-size:.78rem;margin-bottom:1rem}
+  .backlink:hover{color:#3bc4d6}
+  #certificado .cert-link{display:inline-block;max-width:700px;width:100%;margin-top:1.2rem;border:1px solid var(--border);border-radius:12px;overflow:hidden;line-height:0}
+  #certificado .cert-link img{display:block;width:100%;height:auto}
+  .cert-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.2rem;margin-top:1.1rem}
+  .cert-id{font-family:var(--mono);font-size:.82rem;color:var(--fg-muted);letter-spacing:.03em}
+  .cert-btn{display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font-family:var(--sans);font-size:.88rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent);padding:.5rem 1rem;border-radius:8px}
+  .cert-btn:hover{filter:brightness(1.05)}
+</style>
+
+<section id="certificado">
+  <div class="wrap">
+    <div class="eyebrow">Certificado</div>
+    <h2>Máquina completada y verificada</h2>
+    <p>The Hacker Labs emite un certificado al resolver la máquina. Haz clic en la imagen para abrirla a tamaño completo.</p>
+    <a class="cert-link" href="certificado.png" target="_blank" rel="noopener">
+      <img src="certificado.png" alt="Certificado de finalización de la máquina Academy de The Hackers Labs a nombre de leinadfh (ID THL-KVQN-36548567359)" loading="lazy">
+    </a>
+    <div class="cert-meta">
+      <span class="cert-id">ID: THL-KVQN-36548567359</span>
+      <a class="cert-btn" href="https://labs.thehackerslabs.com/machines/share/UqEc3Ct0fun9wmf4beDIJP8Uz8OUyyJVUdJSXhPpcWs" target="_blank" rel="noopener">Ver certificado en The Hackers Labs ↗</a>
+    </div>
   </div>
 </section>
 

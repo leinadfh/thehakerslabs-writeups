@@ -45,6 +45,7 @@
   .card p{margin:0;font-size:.9rem;color:var(--fg-muted)}
   .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.7rem}
   .tag{font-family:var(--mono);font-size:.68rem;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:.15rem .45rem}
+  .cert-badge{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:.15rem .45rem;letter-spacing:.02em}
   footer{border-top:1px solid var(--border);padding-block:1.6rem;color:var(--fg-muted);font-size:.8rem}
   footer a{color:var(--fg-muted)}
 </style>
@@ -65,7 +66,7 @@
       <h2>Máquinas resueltas</h2>
       <div class="cards">
         <a class="card" href="./academy/">
-          <div class="meta"><span>The Hacker Labs</span><span>Linux · Debian</span><span>Fácil–Media</span></div>
+          <div class="meta"><span>The Hacker Labs</span><span>Linux · Debian</span><span>Fácil–Media</span><span class="cert-badge">Certificado ✓</span><span>25 nov 2026</span></div>
           <h3>Academy</h3>
           <p>De un WordPress con contraseña débil a <code>root</code>, encadenando fuerza bruta vía XML-RPC, RCE autenticado por el editor de temas y una escalada por cron sobre un directorio escribible.</p>
           <div class="tags"><span class="tag">WordPress</span><span class="tag">XML-RPC</span><span class="tag">RCE</span><span class="tag">cron privesc</span><span class="tag">SUID</span></div>
