@@ -1,5 +1,7 @@
 # 🧪 CTF Write-ups — The Hacker Labs
 
+**Portfolio de [leinadfh](https://github.com/leinadfh)** — seguridad ofensiva.
+
 Colección de informes de resolución de máquinas CTF realizadas en **laboratorio propio y autorizado**, con fines de aprendizaje de pentesting. El foco está en la **metodología y el razonamiento** de cada fase, no en las soluciones rápidas.
 
 🌐 **Sitio web (informes con diseño):** `https://leinadfh.github.io/thehakerslabs-writeups/`

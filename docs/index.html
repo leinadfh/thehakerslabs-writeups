@@ -7,21 +7,21 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
   :root{
-    --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef1f4; --border:#d8dee6;
-    --fg:#141a21; --fg-muted:#5b6673; --accent:#0d7d8c; --accent-soft:#d3ebee;
+    --bg:#f4f1f0; --surface:#ffffff; --surface-2:#ece6e5; --border:#dcd3d2;
+    --fg:#17110f; --fg-muted:#6c5f5c; --accent:#c42030; --accent-soft:#f6dadd;
     --high:#d9620a;
     --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
     --sans:"Inter",system-ui,-apple-system,sans-serif;
     --display:"Space Grotesk",var(--sans);
   }
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
-    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33; --high:#ff9a4d;
+    --bg:#0b0d10; --surface:#14161c; --surface-2:#1b1e26; --border:#2b2b35;
+    --fg:#e8e9ec; --fg-muted:#969aa4; --accent:#ff4d4d; --accent-soft:#2a1317; --high:#ff9a4d;
     color-scheme:dark;
   }}
   :root[data-theme="dark"]{
-    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
-    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33; --high:#ff9a4d;
+    --bg:#0b0d10; --surface:#14161c; --surface-2:#1b1e26; --border:#2b2b35;
+    --fg:#e8e9ec; --fg-muted:#969aa4; --accent:#ff4d4d; --accent-soft:#2a1317; --high:#ff9a4d;
     color-scheme:dark;
   }
   *{box-sizing:border-box}
@@ -30,10 +30,11 @@
   .wrap{max-width:820px;margin-inline:auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
   a{color:var(--accent)}
   h1,h2{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
-  .hero{background:linear-gradient(135deg,#0d1117 0%,#102a30 100%);color:#e6edf3;padding-block:3rem 2.6rem}
-  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#3bc4d6;margin-bottom:.9rem}
+  .hero{background:linear-gradient(135deg,#0b0d10 0%,#2a0e13 100%);color:#e6edf3;padding-block:3rem 2.6rem}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#ff5c5c;margin-bottom:.9rem}
   .hero h1{font-size:clamp(2rem,6vw,2.8rem);font-weight:700;color:#fff}
   .hero p{color:#9aa7b4;max-width:60ch;margin:.7rem 0 0}
+  .hero .byline{font-family:var(--mono);font-size:.85rem;color:#ff5c5c;letter-spacing:.04em;margin:.25rem 0 0}
   .note{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.85rem;color:var(--fg-muted);margin:1.6rem 0}
   main{padding-block:2rem 3rem}
   h2{font-size:1.3rem;margin-bottom:1rem}
@@ -55,6 +56,7 @@
     <div class="wrap">
       <div class="eyebrow">Portfolio · Seguridad ofensiva</div>
       <h1>CTF Write-ups</h1>
+      <p class="byline">por leinadfh</p>
       <p>Resolución de máquinas CTF en laboratorio propio y autorizado, documentando la metodología y el razonamiento de cada fase.</p>
     </div>
   </header>
@@ -77,7 +79,7 @@
 
   <footer>
     <div class="wrap">
-      Contenido educativo · Laboratorios autorizados · <a href="https://github.com/leinadfh/thehakerslabs-writeups">Código en GitHub</a>
+      Portfolio de <strong>leinadfh</strong> · Contenido educativo · Laboratorios autorizados · <a href="https://github.com/leinadfh/thehakerslabs-writeups">Código en GitHub</a>
     </div>
   </footer>
 </body>

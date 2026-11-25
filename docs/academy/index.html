@@ -9,22 +9,22 @@
 <style>
   /* Layout: franjas a todo el ancho con wrapper interior de 960px; tarjetas de hallazgo apiladas */
   :root{
-    --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef1f4; --border:#d8dee6;
-    --fg:#141a21; --fg-muted:#5b6673; --accent:#0d7d8c; --accent-soft:#d3ebee;
+    --bg:#f4f1f0; --surface:#ffffff; --surface-2:#ece6e5; --border:#dcd3d2;
+    --fg:#17110f; --fg-muted:#6c5f5c; --accent:#c42030; --accent-soft:#f6dadd;
     --crit:#c62a2f; --high:#d9620a; --med:#b8860b; --low:#2f7d4a; --info:#5b6673;
     --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
     --sans:"Inter",system-ui,-apple-system,sans-serif;
     --display:"Space Grotesk",var(--sans);
   }
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
-    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33;
+    --bg:#0b0d10; --surface:#14161c; --surface-2:#1b1e26; --border:#2b2b35;
+    --fg:#e8e9ec; --fg-muted:#969aa4; --accent:#ff4d4d; --accent-soft:#2a1317;
     --crit:#ff6b6e; --high:#ff9a4d; --med:#e8c35a; --low:#5fd38a; --info:#9aa7b4;
     color-scheme:dark;
   }}
   :root[data-theme="dark"]{
-    --bg:#0d1117; --surface:#161b22; --surface-2:#1c232d; --border:#2a333f;
-    --fg:#e6edf3; --fg-muted:#9aa7b4; --accent:#3bc4d6; --accent-soft:#122d33;
+    --bg:#0b0d10; --surface:#14161c; --surface-2:#1b1e26; --border:#2b2b35;
+    --fg:#e8e9ec; --fg-muted:#969aa4; --accent:#ff4d4d; --accent-soft:#2a1317;
     --crit:#ff6b6e; --high:#ff9a4d; --med:#e8c35a; --low:#5fd38a; --info:#9aa7b4;
     color-scheme:dark;
   }
@@ -41,10 +41,10 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
 
   /* Hero */
-  .hero{background:linear-gradient(135deg,#0d1117 0%,#102a30 100%);color:#e6edf3;
+  .hero{background:linear-gradient(135deg,#0b0d10 0%,#2a0e13 100%);color:#e6edf3;
     margin-top:calc(-1 * env(safe-area-inset-top,0px));
     padding-top:calc(env(safe-area-inset-top,0px) + 2.6rem);padding-bottom:2.6rem;border-bottom:1px solid var(--border)}
-  .hero .eyebrow{color:#3bc4d6}
+  .hero .eyebrow{color:#ff5c5c}
   .hero h1{font-size:clamp(2rem,6vw,3rem);font-weight:700;color:#fff;margin-bottom:.4rem}
   .hero .sub{color:#9aa7b4;font-size:1.05rem;max-width:60ch}
   .hero .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;margin-top:1.4rem;font-family:var(--mono);font-size:.8rem;color:#9aa7b4}
@@ -306,7 +306,7 @@ cat /root/root.txt &gt; /dev/shm/root.txt
 
 <style>
   .backlink{display:inline-block;color:#9aa7b4;text-decoration:none;font-family:var(--mono);font-size:.78rem;margin-bottom:1rem}
-  .backlink:hover{color:#3bc4d6}
+  .backlink:hover{color:#ff5c5c}
   #certificado .cert-link{display:inline-block;max-width:700px;width:100%;margin-top:1.2rem;border:1px solid var(--border);border-radius:12px;overflow:hidden;line-height:0}
   #certificado .cert-link img{display:block;width:100%;height:auto}
   .cert-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.2rem;margin-top:1.1rem}
@@ -322,6 +322,7 @@ cat /root/root.txt &gt; /dev/shm/root.txt
     <p>The Hacker Labs emite un certificado al resolver la máquina. Haz clic en la imagen para abrirla a tamaño completo.</p>
     <a class="cert-link" href="certificado.png" target="_blank" rel="noopener">
       <img src="certificado.png" alt="Certificado de finalización de la máquina Academy de The Hackers Labs a nombre de leinadfh (ID THL-KVQN-36548567359)" loading="lazy">
+      <span class="cert-hint">🔍 clic para ampliar</span>
     </a>
     <div class="cert-meta">
       <span class="cert-id">ID: THL-KVQN-36548567359</span>
@@ -332,8 +333,29 @@ cat /root/root.txt &gt; /dev/shm/root.txt
 
 <footer>
   <div class="wrap">
-    The Hacker Labs · Academy — Informe de pentest con fines educativos · Laboratorio propio autorizado · 24 nov 2026
+    Portfolio de <strong>leinadfh</strong> · The Hacker Labs · Academy — Informe de pentest con fines educativos · Laboratorio propio autorizado · 24 nov 2026
   </div>
 </footer>
+
+<div id="lightbox" class="lightbox" hidden>
+  <img src="certificado.png" alt="Certificado de la máquina Academy a tamaño completo">
+</div>
+<style>
+  #certificado .cert-link{position:relative;cursor:zoom-in}
+  .cert-hint{position:absolute;bottom:.6rem;right:.6rem;font-family:var(--mono);font-size:.7rem;color:#fff;background:rgba(10,11,14,.72);padding:.25rem .5rem;border-radius:6px;line-height:1}
+  .lightbox{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:4vmin;background:rgba(7,8,11,.92);cursor:zoom-out;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  .lightbox img{max-width:100%;max-height:100%;width:auto;height:auto;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.65)}
+</style>
+<script>
+  (function(){
+    var box=document.getElementById('lightbox');
+    var trigger=document.querySelector('.cert-link');
+    if(!box||!trigger)return;
+    trigger.addEventListener('click',function(e){e.preventDefault();box.hidden=false;document.body.style.overflow='hidden';});
+    function close(){box.hidden=true;document.body.style.overflow='';}
+    box.addEventListener('click',close);
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!box.hidden)close();});
+  })();
+</script>
 </body>
 </html>
